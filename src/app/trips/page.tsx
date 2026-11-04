@@ -13,7 +13,7 @@ type Trip = {
   trip_time: string;
   passengers: number;
   status: string;
-  fare: number | null;
+  fare: number | null; booked_via: string;
   customers: { name: string; phone: string } | null;
   drivers: { name: string } | null;
 };
@@ -58,7 +58,7 @@ export default function TripsPage() {
       }
       const { data, error } = await supabase
         .from("trips")
-        .select("id, pickup, dropoff, trip_date, trip_time, passengers, status, fare, customers(name, phone), drivers(name)")
+        .select("id, pickup, dropoff, trip_date, trip_time, passengers, status, fare, booked_via, customers(name, phone), drivers(name)")
         .gte("trip_date", today)
         .order("trip_date")
         .order("trip_time");
@@ -107,7 +107,7 @@ export default function TripsPage() {
                   {showDate(t.trip_date, today)} · {new Date("2000-01-01T" + t.trip_time).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}
                 </p>
                 <span className={`rounded-full px-2 py-1 text-xs font-semibold ${statusStyle[t.status] ?? ""}`}>
-                  {statusLabel[t.status] ?? t.status}
+                  {statusLabel[t.status] ?? t.status}{t.booked_via === "whatsapp_link" ? " · via link" : ""}
                 </span>
               </div>
               <p className="text-gray-800">{t.pickup} → {t.dropoff}</p>
