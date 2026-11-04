@@ -27,7 +27,7 @@ export default function LoginPage() {
   return (
     <main className="min-h-screen flex items-center justify-center bg-[#0F3D2E] p-4">
       <form onSubmit={handleLogin} className="w-full max-w-sm rounded-2xl bg-white p-6 shadow">
-        <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-[#F5B800] text-xl font-black text-[#0F3D2E]">
+        <div className="mx-auto mb-4 flex h-28 w-28 items-center justify-center bg-[url(/logo.svg)] bg-contain bg-no-repeat text-[0px] text-[#0F3D2E]">
           ABBA
         </div>
         <h1 className="text-center text-2xl font-bold text-[#0F3D2E]">ABBA Car Rental</h1>
