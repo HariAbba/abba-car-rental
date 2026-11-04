@@ -78,9 +78,9 @@ export default function BookPage() {
           <div className="mx-auto mb-4 flex h-28 w-28 items-center justify-center bg-[url(/logo.svg)] bg-contain bg-no-repeat text-[0px] text-[#0F3D2E]">
             ABBA
           </div>
-          <h1 className="mb-2 text-2xl font-bold text-[#0F3D2E]">Booking received!</h1>
+          <h1 className="mb-2 text-2xl font-bold text-[#0F3D2E]">Booking received! / ബുക്കിംഗ് ലഭിച്ചു!</h1>
           <p className="mb-6 text-gray-700">
-            Thank you, {name}. We will send you your driver details soon.
+            Thank you, {name}. We will send you your driver details soon. ഡ്രൈവറുടെ വിവരങ്ങൾ ഉടൻ അയക്കാം
           </p>
           <a
             href={`https://wa.me/${ABBA_WHATSAPP}?text=${encodeURIComponent(text)}`}
@@ -102,13 +102,13 @@ export default function BookPage() {
         <div className="mx-auto mb-4 flex h-28 w-28 items-center justify-center bg-[url(/logo.svg)] bg-contain bg-no-repeat text-[0px] text-[#0F3D2E]">
           ABBA
         </div>
-        <h1 className="text-center text-2xl font-bold text-[#0F3D2E]">Book a taxi</h1>
+        <h1 className="text-center text-2xl font-bold text-[#0F3D2E]">Book a taxi / ടാക്സി ബുക്ക് ചെയ്യൂ</h1>
         <p className="mb-6 text-center text-sm text-gray-600">ABBA Car Rental</p>
 
-        <label className={labelClass}>Your name</label>
+        <label className={labelClass}>Your name / നിങ്ങളുടെ പേര്</label>
         <input required value={name} onChange={(e) => setName(e.target.value)} className={inputClass} />
 
-        <label className={labelClass}>Phone (WhatsApp)</label>
+        <label className={labelClass}>Phone (WhatsApp) / ഫോൺ നമ്പർ</label>
         <input
           type="tel"
           required
@@ -118,27 +118,27 @@ export default function BookPage() {
           className={inputClass}
         />
 
-        <label className={labelClass}>Pickup place</label>
+        <label className={labelClass}>Pickup place / കയറുന്ന സ്ഥലം</label>
         <input required value={pickup} onChange={(e) => setPickup(e.target.value)} className={inputClass} />
 
-        <label className={labelClass}>Drop place</label>
+        <label className={labelClass}>Drop place / ഇറങ്ങുന്ന സ്ഥലം</label>
         <input required value={dropoff} onChange={(e) => setDropoff(e.target.value)} className={inputClass} />
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className={labelClass}>Date</label>
+            <label className={labelClass}>Date / തീയതി</label>
             <input type="date" required min={today} value={date} onChange={(e) => setDate(e.target.value)} className={inputClass} />
           </div>
           <div>
-            <label className={labelClass}>Time</label>
+            <label className={labelClass}>Time / സമയം</label>
             <input type="time" required value={time} onChange={(e) => setTime(e.target.value)} className={inputClass} />
           </div>
         </div>
 
-        <label className={labelClass}>Passengers</label>
+        <label className={labelClass}>Passengers / യാത്രക്കാർ</label>
         <input type="number" min="1" value={passengers} onChange={(e) => setPassengers(e.target.value)} className={inputClass} />
 
-        <label className={labelClass}>Notes (optional)</label>
+        <label className={labelClass}>Notes / കുറിപ്പ് (optional)</label>
         <textarea
           placeholder="Luggage, return trip, landmark..."
           value={notes}
@@ -154,7 +154,7 @@ export default function BookPage() {
           disabled={saving}
           className="w-full rounded-lg bg-[#F5B800] p-3 font-bold text-[#0F3D2E] disabled:opacity-60"
         >
-          {saving ? "Booking..." : "Book now"}
+          {saving ? "Booking..." : "Book now / ബുക്ക് ചെയ്യൂ"}
         </button>
       </form>
     </main>

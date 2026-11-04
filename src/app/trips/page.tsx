@@ -97,6 +97,7 @@ export default function TripsPage() {
         >
           + Add trip
         </Link>
+        <a href={"https://wa.me/?text=" + encodeURIComponent("Book your taxi with ABBA Car Rental: https://abba-car-rental.netlify.app/book")} target="_blank" rel="noopener noreferrer" className="mb-4 block rounded-lg border border-green-700 p-3 text-center font-bold text-green-800">Share booking link on WhatsApp</a>
 
         {message && <p className="text-gray-600">{message}</p>}
 
