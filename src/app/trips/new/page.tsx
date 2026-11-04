@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
@@ -23,7 +23,11 @@ export default function NewTripPage() {
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
 
-  async function handleSave(e: FormEvent) {
+   useEffect(() => {
+    const q = new URLSearchParams(window.location.search);
+    setName(q.get("name") ?? "");
+    setPhone(q.get("phone") ?? "");
+  }, []); async function handleSave(e: FormEvent) {
     e.preventDefault();
     setSaving(true);
     setError("");
@@ -97,7 +101,7 @@ export default function NewTripPage() {
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className={labelClass}>Date</label>
-              <input type="date" required value={date} onChange={(e) => setDate(e.target.value)} className={inputClass} />
+              <input type="date" required min={today} value={date} onChange={(e) => setDate(e.target.value)} className={inputClass} />
             </div>
             <div>
               <label className={labelClass}>Time</label>
