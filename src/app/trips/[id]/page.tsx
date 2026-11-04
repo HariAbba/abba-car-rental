@@ -98,8 +98,28 @@ export default function TripDetailPage() {
     }
     load();
   }
+  async function setStatus(status: string) {
+    let cancel_reason: string | null = null;
+    if (status === "cancelled") {
+      const reason = window.prompt("Reason for cancelling? (optional)");
+      if (reason === null) return;
+      cancel_reason = reason;
+    }
+    setSaving(true);
+    const { error } = await supabase
+      .from("trips")
+      .update({ status, cancel_reason })
+      .eq("id", params.id);
+    setSaving(false);
+    if (error) {
+      setMessage("Could not update: " + error.message);
+      return;
+    }
+    load();
+  }
+ 
 
-  if (!trip) {
+ if (!trip) {
     return (
       <main className="min-h-screen bg-gray-50 p-4">
         <p className="mx-auto max-w-md text-gray-600">{message}</p>
@@ -160,7 +180,7 @@ export default function TripDetailPage() {
 
         {message && <p className="mb-4 text-sm text-red-600">{message}</p>}
 
-        {driver && (
+        {driver && trip.status === "assigned" && (
           <div className="mb-4 rounded-lg bg-green-50 p-4">
             <p className="mb-3 font-semibold text-green-900">Assigned to {driver.name}</p>
             <a
@@ -182,8 +202,31 @@ export default function TripDetailPage() {
           </div>
         )}
 
-        <h2 className="mb-2 font-bold text-gray-900">
-          {driver ? "Change driver" : "Assign to"}
+              <div className="mb-4 rounded-lg bg-white p-4 shadow-sm">
+          <p className="mb-3 font-bold text-gray-900">
+            Status: {trip.status === "booked" ? "Not assigned" : trip.status === "no_show" ? "No-show" : trip.status.charAt(0).toUpperCase() + trip.status.slice(1)}
+          </p>
+          {trip.status === "booked" || trip.status === "assigned" ? (
+            <div className="grid grid-cols-3 gap-2">
+              <button onClick={() => setStatus("done")} disabled={saving} className="rounded-lg bg-gray-800 p-3 text-sm font-bold text-white">
+                Done
+              </button>
+              <button onClick={() => setStatus("no_show")} disabled={saving} className="rounded-lg bg-gray-500 p-3 text-sm font-bold text-white">
+                No-show
+              </button>
+              <button onClick={() => setStatus("cancelled")} disabled={saving} className="rounded-lg bg-red-600 p-3 text-sm font-bold text-white">
+                Cancel
+              </button>
+            </div>
+          ) : (
+            <button onClick={() => setStatus(trip.driver_id ? "assigned" : "booked")} disabled={saving} className="w-full rounded-lg border border-gray-300 p-3 text-sm font-bold text-gray-800">
+              Reopen trip
+            </button>
+          )}
+        </div> 
+
+ <h2 className="mb-2 font-bold text-gray-900">
+          {driver ? "Tap a car to change driver" : "Assign to"}
         </h2>
         <ul className="space-y-2">
           {drivers.map((d) => (

@@ -81,7 +81,7 @@ export default function TripsPage() {
     <main className="min-h-screen bg-gray-50 p-4">
       <div className="mx-auto max-w-md">
         <div className="mb-4 flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-[#0F3D2E]">Trips</h1>
+          <h1 className="text-2xl font-bold text-[#0F3D2E]">Trips</h1><Link href="/drivers" className="ml-auto mr-2 rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700">Drivers</Link>
           <button
             onClick={logout}
             className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700"
