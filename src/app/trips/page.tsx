@@ -1,15 +1,53 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 
-type Driver = { id: number; name: string; car_number: string | null };
+type Trip = {
+  id: number;
+  pickup: string;
+  dropoff: string;
+  trip_date: string;
+  trip_time: string;
+  passengers: number;
+  status: string;
+  fare: number | null;
+  customers: { name: string; phone: string } | null;
+  drivers: { name: string } | null;
+};
+
+const statusStyle: Record<string, string> = {
+  booked: "bg-yellow-100 text-yellow-800",
+  assigned: "bg-green-100 text-green-800",
+  done: "bg-gray-200 text-gray-700",
+  cancelled: "bg-red-100 text-red-700",
+  no_show: "bg-gray-200 text-gray-700",
+};
+
+const statusLabel: Record<string, string> = {
+  booked: "Not assigned",
+  assigned: "Assigned",
+  done: "Done",
+  cancelled: "Cancelled",
+  no_show: "No-show",
+};
+
+function showDate(date: string, today: string) {
+  if (date === today) return "Today";
+  return new Date(date + "T00:00").toLocaleDateString("en-IN", {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+  });
+}
 
 export default function TripsPage() {
   const router = useRouter();
-  const [drivers, setDrivers] = useState<Driver[]>([]);
+  const [trips, setTrips] = useState<Trip[]>([]);
   const [message, setMessage] = useState("Loading...");
+  const today = new Date().toLocaleDateString("en-CA");
 
   useEffect(() => {
     async function load() {
@@ -19,18 +57,20 @@ export default function TripsPage() {
         return;
       }
       const { data, error } = await supabase
-        .from("drivers")
-        .select("id, name, car_number")
-        .order("id");
+        .from("trips")
+        .select("id, pickup, dropoff, trip_date, trip_time, passengers, status, fare, customers(name, phone), drivers(name)")
+        .gte("trip_date", today)
+        .order("trip_date")
+        .order("trip_time");
       if (error) {
-        setMessage("Could not load cars: " + error.message);
+        setMessage("Could not load trips: " + error.message);
         return;
       }
-      setDrivers(data ?? []);
-      setMessage("");
+      setTrips((data ?? []) as unknown as Trip[]);
+      setMessage(data && data.length > 0 ? "" : "No trips yet. Tap + Add trip to add one.");
     }
     load();
-  }, [router]);
+  }, [router, today]);
 
   async function logout() {
     await supabase.auth.signOut();
@@ -49,15 +89,35 @@ export default function TripsPage() {
             Log out
           </button>
         </div>
-        <p className="mb-4 rounded-lg bg-[#F5B800]/20 p-3 text-sm text-gray-800">
-          Trips screen coming next. For now, here are your cars:
-        </p>
+
+        <Link
+          href="/trips/new"
+          className="mb-4 block rounded-lg bg-[#F5B800] p-3 text-center font-bold text-[#0F3D2E]"
+        >
+          + Add trip
+        </Link>
+
         {message && <p className="text-gray-600">{message}</p>}
-        <ul className="space-y-2">
-          {drivers.map((d) => (
-            <li key={d.id} className="rounded-lg bg-white p-3 shadow-sm">
-              <p className="font-semibold text-gray-900">{d.name}</p>
-              <p className="text-sm text-gray-600">{d.car_number}</p>
+
+        <ul className="space-y-3">
+          {trips.map((t) => (
+            <li key={t.id} className="rounded-lg bg-white p-4 shadow-sm">
+              <div className="mb-1 flex items-center justify-between">
+                <p className="font-bold text-gray-900">
+                  {showDate(t.trip_date, today)} · {t.trip_time.slice(0, 5)}
+                </p>
+                <span className={`rounded-full px-2 py-1 text-xs font-semibold ${statusStyle[t.status] ?? ""}`}>
+                  {statusLabel[t.status] ?? t.status}
+                </span>
+              </div>
+              <p className="text-gray-800">{t.pickup} → {t.dropoff}</p>
+              <p className="text-sm text-gray-600">
+                {t.customers?.name} · {t.customers?.phone}
+              </p>
+              <p className="text-sm text-gray-600">
+                Driver: {t.drivers?.name ?? "Not assigned"}
+                {t.fare ? ` · ₹${t.fare}` : ""}
+              </p>
             </li>
           ))}
         </ul>
