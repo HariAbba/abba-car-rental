@@ -101,10 +101,10 @@ export default function TripsPage() {
 
         <ul className="space-y-3">
           {trips.map((t) => (
-            <li key={t.id} className="rounded-lg bg-white p-4 shadow-sm">
+            <li key={t.id}><Link href={`/trips/${t.id}`} className="block rounded-lg bg-white p-4 shadow-sm">
               <div className="mb-1 flex items-center justify-between">
                 <p className="font-bold text-gray-900">
-                  {showDate(t.trip_date, today)} · {t.trip_time.slice(0, 5)}
+                  {showDate(t.trip_date, today)} · {new Date("2000-01-01T" + t.trip_time).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}
                 </p>
                 <span className={`rounded-full px-2 py-1 text-xs font-semibold ${statusStyle[t.status] ?? ""}`}>
                   {statusLabel[t.status] ?? t.status}
@@ -118,7 +118,7 @@ export default function TripsPage() {
                 Driver: {t.drivers?.name ?? "Not assigned"}
                 {t.fare ? ` · ₹${t.fare}` : ""}
               </p>
-            </li>
+            </Link></li>
           ))}
         </ul>
       </div>
