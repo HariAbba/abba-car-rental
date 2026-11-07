@@ -4,7 +4,7 @@ import { useState, type FormEvent } from "react";
 import { supabase } from "@/lib/supabase";
 
 // Hari's WhatsApp number: country code + number, digits only. Change when Hari confirms.
-const ABBA_WHATSAPP = "910000000000";
+const ABBA_WHATSAPP = "919495126161";
 
 const inputClass = "mb-4 mt-1 w-full rounded-lg border border-gray-300 p-3 text-gray-900";
 const labelClass = "block text-sm font-medium text-gray-800";
